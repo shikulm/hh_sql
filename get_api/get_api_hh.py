@@ -27,19 +27,32 @@ class GetApiHh():
         if response.status_code != 200:
             raise HHApiError(f"Error type: {response.json()['errors'][0]['type']}, "
                             f"Status code {response.status_code}")
-        return response.json()['items']
+        return [
+            {
+                'id_vacancy': el.get('id'),
+                'name_vacancy': el.get('name'),
+                'id_employer': el['employer'].get('id'),
+                'city': el['area'].get('name'),
+                'salary_from': el['salary'].get('from'),
+                'salary_to': el['salary'].get('to'),
+                'requirement': el['snippet'].get('requirement'),
+                'responsibility': el['snippet'].get('responsibility')
+
+            } for el in response.json()['items']
+        ]
+        # return response.json()['items']
 
 
     def get_employer(self) -> list[dict]:
         return [
             {
-                'id': uid,
+                'id_employer': uid,
                 'name': httpx.get(f"https://api.hh.ru/employers/{uid}").json().get('name'),
                 'url': httpx.get(f"https://api.hh.ru/employers/{uid}").json().get('alternate_url')
             } for uid in self.params.get('employer_id') if uid is not None
         ]
 
 
-# hh = GetApiHh()
+hh = GetApiHh()
 # print(hh.get_employer())
-# print(hh.get_vacancies())
+print(hh.get_vacancies())
