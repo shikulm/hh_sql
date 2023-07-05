@@ -160,3 +160,4 @@ cython_debug/
 .idea/
 vacancies.json
 employer.json
+.env

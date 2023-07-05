@@ -35,9 +35,9 @@ class GetApiHh():
                 'city': el['area'].get('name'),
                 'salary_from': el['salary'].get('from'),
                 'salary_to': el['salary'].get('to'),
+                'url': el.get('alternate_url'),
                 'requirement': el['snippet'].get('requirement'),
                 'responsibility': el['snippet'].get('responsibility')
-
             } for el in response.json()['items']
         ]
         # return response.json()['items']
@@ -47,12 +47,12 @@ class GetApiHh():
         return [
             {
                 'id_employer': uid,
-                'name': httpx.get(f"https://api.hh.ru/employers/{uid}").json().get('name'),
+                'name_employer': httpx.get(f"https://api.hh.ru/employers/{uid}").json().get('name'),
                 'url': httpx.get(f"https://api.hh.ru/employers/{uid}").json().get('alternate_url')
             } for uid in self.params.get('employer_id') if uid is not None
         ]
 
 
-hh = GetApiHh()
-# print(hh.get_employer())
-print(hh.get_vacancies())
+# hh = GetApiHh()
+# # print(hh.get_employer())
+# print(hh.get_vacancies())
